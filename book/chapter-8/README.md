@@ -1,6 +1,6 @@
 # Flux
 
-I'm obsessed by making my code simpler. I didn't say *smaller* because having less code doesn't mean that is simple and easy to work with. I believe that big part of the problems in the software industry come from the unnecessary complexity. Complexity which is a result of our own abstractions. You know, we (the programmers) like to abstract. We like placing things in black boxes and hope that these boxes work together.
+ผมชอบที่จะเขียนโค้ดทำให้มันดูง่าย ผมไม่ได้หมายความว่าเขียนโค้ดให้น้อยเพราะการเขียนโค้ดให้น้อยมันก็ไม่ได้หมายความว่ามันจะทำงานง่าย ผมเชื่อว่าปัญหาที่ใหญ่ในวงการของการพัฒนาซอฟต์แวร์นั้นมาจากความซับซ้อนที่ไม่จำเป็น ความซับซ้อนี้เป็นผลมาจากงานของของเราเองซึ่งมันเป็นสิ่งที่เป็นนามธรรม เหมือนกับการที่เราอะไรใส่อะไรบางอย่างในกล่องดำ (black box) และเราก็คาดหวังว่ามันจะทำงานร่วมกัน
 
 [Flux](http://facebook.github.io/flux/) is an architectural design pattern for building user interfaces. It was introduced by Facebook at their [F8](https://youtu.be/nYkdrAPrdcw?t=568) conference. Since then, lots of companies adopted the idea and it seems like a good pattern for building front-end apps. Flux is very often used with [React](http://facebook.github.io/react/). Another library released by Facebook. I myself use React+Flux/Redux in my [daily job](http://antidote.me/) and I could say that it is simple and really flexible. The pattern helps creating apps faster and at the same time keeps the code well organized.
 
