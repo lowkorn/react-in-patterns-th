@@ -1,16 +1,17 @@
 # Flux
 
-ผมชอบที่จะเขียนโค้ดทำให้มันดูง่าย ผมไม่ได้หมายความว่าเขียนโค้ดให้น้อยเพราะการเขียนโค้ดให้น้อยมันก็ไม่ได้หมายความว่ามันจะทำงานง่าย ผมเชื่อว่าปัญหาที่ใหญ่ในวงการของการพัฒนาซอฟต์แวร์นั้นมาจากความซับซ้อนที่ไม่จำเป็น ความซับซ้อนี้เป็นผลมาจากงานของของเราเองซึ่งมันเป็นสิ่งที่เป็นนามธรรม เหมือนกับการที่เราอะไรใส่อะไรบางอย่างในกล่องดำ (black box) และเราก็คาดหวังว่ามันจะทำงานร่วมกัน
+ผมมักจะเขียนโค้ดทำให้มันดูง่าย ผมไม่ได้หมายความว่าเขียนโค้ดให้น้อยเพราะการเขียนโค้ดให้น้อยมันก็ไม่ได้หมายความว่ามันจะทำงานง่าย ผมเชื่อว่าปัญหาที่ใหญ่ในวงการของการพัฒนาซอฟต์แวร์นั้นมาจากความซับซ้อนที่ไม่จำเป็น ความซับซ้อนี้เป็นผลมาจากงานของของเราเองซึ่งมันเป็นสิ่งที่เป็นนามธรรม เหมือนกับการที่เราอะไรใส่อะไรบางอย่างในกล่องดำ (black box) และเราก็คาดหวังว่ามันจะทำงานร่วมกัน
 
-[Flux](http://facebook.github.io/flux/) is an architectural design pattern for building user interfaces. It was introduced by Facebook at their [F8](https://youtu.be/nYkdrAPrdcw?t=568) conference. Since then, lots of companies adopted the idea and it seems like a good pattern for building front-end apps. Flux is very often used with [React](http://facebook.github.io/react/). Another library released by Facebook. I myself use React+Flux/Redux in my [daily job](http://antidote.me/) and I could say that it is simple and really flexible. The pattern helps creating apps faster and at the same time keeps the code well organized.
+[Flux](http://facebook.github.io/flux/) เป็นรูปแบบหนึ่งของการออกแบบสถาปัตยกรรมสำหรับการสร้างส่วนติดต่อผู้ใช้  ถูกเผยแพร่โดย Facebook ในงานสัมนา [F8](https://youtu.be/nYkdrAPrdcw?t=568) หลังจากนั้นหลายบริษัทได้นำไปใช้และดูเหมือนว่ามันวิธีการที่ดีในการพัฒนา Front-end  Flux ถูกนำมาใช้ควบคู่กับ React  บ่อยมาก  ตัวผมเองได้ใช้ React+Flux/Redux ในงานประจำของผม และผมบอกได้เลยว่ามันง่ายและยืดหยุ่นจริงๆ รูปแบบดังกล่าวช่วยให้สร้างแอปได้เร็วขึ้นและช่วยประหยัดเวลาในการจัดการกับโค้ด
 
-## Flux architecture and its main characteristics
+## สถาปัตยกรรม Flux และลักษณะสำคัญของมัน
 
 ![Basic flux architecture](./fluxiny_basic_flux_architecture.jpg)
 
-The main actor in this pattern is the *dispatcher*. It acts as a hub for all the events in the system. Its job is to receive notifications that we call *actions* and pass them to all the *stores*. The store decides if it is interested or not and reacts by changing its internal state/data. That change is triggering re-rendering of the *views* which are (in our case) React components. If we have to compare Flux to the well known MVC we may say that the store is similar to the model. It keeps the data and its mutations.
+ตัวดำเนินการหลักในรูปแบบนี้คือ *dispatcher* คอยกระทำหน้าที่เป็นจุดเชื่อมกันสำหรับ event ทั้งหมดของระบบ หน้าที่ของมันคือรอรับการแจ้งเตือนเมื่อเราได้เรียก *action* และส่งไปยัง *store* เพื่อทำการตรสจสอบว่าจะต้องทำารเปลี่ยนแปลงของ state หรือไม่ เมื่อมีการเปลี่ยนแปลงเกิดขึ้นก็ทำการเรนเดอร์ในส่วนของ *view* (React components) ใหม่ ถ้าเราเปรียบเทียบ Flux กับ MVC อาจจะพูดได้ว่า store เปรียบเสมือนกับ model ที่คอยเก็บข้อมูลและวิธีการในการเปลี่ยนแปลงข้อมูล
 
-The actions are coming to the dispatcher either from the views or from other parts of the system, like services. For example a module that performs a HTTP request. When it receives the result it may fire an action saying that the request was successful.
+Action ที่มายัง dispatcher  นั้นมาจากทั้งสวนของ view และส่วนอื่น ๆ ของระบบ เปรียบเสมือนกับเป็นบริการ (service) ยกตัวอย่างเข่นโมดูลที่ทำการร้องขอ HTTP เมื่อได้รับการตอบกลับมาจะทำการทำเนินการบางอย่าง เพื่อทำการบอกว่าการร้องขอนั้นได้สำเร็จแล้ว
+
 
 ## Implementing a Flux architecture
 
