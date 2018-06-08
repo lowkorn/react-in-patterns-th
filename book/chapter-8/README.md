@@ -4,7 +4,7 @@
 
 [Flux](http://facebook.github.io/flux/) เป็นรูปแบบหนึ่งของการออกแบบสถาปัตยกรรมสำหรับการสร้างส่วนติดต่อผู้ใช้  ถูกเผยแพร่โดย Facebook ในงานสัมนา [F8](https://youtu.be/nYkdrAPrdcw?t=568) หลังจากนั้นหลายบริษัทได้นำไปใช้และดูเหมือนว่ามันวิธีการที่ดีในการพัฒนา Front-end  Flux ถูกนำมาใช้ควบคู่กับ React  บ่อยมาก  ตัวผมเองได้ใช้ React+Flux/Redux ในงานประจำของผม และผมบอกได้เลยว่ามันง่ายและยืดหยุ่นจริงๆ รูปแบบดังกล่าวช่วยให้สร้างแอปได้เร็วขึ้นและช่วยประหยัดเวลาในการจัดการกับโค้ด
 
-## สถาปัตยกรรม Flux และลักษณะสำคัญของมัน
+## สถาปัตยกรรม Flux และลักษณะสำคัญ
 
 ![Basic flux architecture](./fluxiny_basic_flux_architecture.jpg)
 
@@ -13,17 +13,17 @@
 Action ที่มายัง dispatcher  นั้นมาจากทั้งสวนของ view และส่วนอื่น ๆ ของระบบ เปรียบเสมือนกับเป็นบริการ (service) ยกตัวอย่างเข่นโมดูลที่ทำการร้องขอ HTTP เมื่อได้รับการตอบกลับมาจะทำการทำเนินการบางอย่าง เพื่อทำการบอกว่าการร้องขอนั้นได้สำเร็จแล้ว
 
 
-## Implementing a Flux architecture
+## การใช้งานสถาปัตยกรรม Flux
 
-As every other popular concept Flux also has some [variations](https://medium.com/social-tables-tech/we-compared-13-top-flux-implementations-you-won-t-believe-who-came-out-on-top-1063db32fe73). Very often to understand something we have to implement it. In the next few sections we will create a library that provides helpers for building the Flux pattern.
+เช่นเดียวกับแนวคิดยอดนิยมอื่น ๆ Flux ก็มีรูปการนำไปใช้ที่[แตกต่าง](https://medium.com/social-tables-tech/we-compared-13-top-flux-implementations-you-won-t-believe-who-came-out-on-top-1063db32fe73) โดยทั่วไปวิธีที่ดีที่สุดในการทำความเข้าใจกับเทคโนโลยีคือการนำไปปฏิบัติ ในส่วนต่อไปนี้เราจะสร้างไลบรารีที่มีฟังก์ชัน helper เพื่อสร้างรูปแบบ Flux
 
-### The dispatcher
+### Dispatcher
 
-In most of the cases we need a single dispatcher. Because it acts as a glue for the rest of the parts it makes sense that we have only one. The dispatcher needs to know about two things - actions and stores. The actions are simply forwarded to the stores so we don't necessary have to keep them. The stores however should be tracked inside the dispatcher so we can loop through them:
+ในหลายกรณีเราจำเป็นต้องมี dispatcher อันเดียว เพราะมันทำหน้าที่เป็นตัวเชื่อมกันตัวอื่น ๆ ที่เหลือให้เหมือนกับว่าเพียงแค่อันเดียว  dispatcher จะรู้จักกับสองสิ่งนี้คือ action และ store actions เป็นเพียงแค่ตัวที่ส่งไปการดำเนินการให้ store ไม่จำเป็นที่จะเก็บไว้ใน dispatcher ส่วน store ควรติดตามภายใน dispatcher เพื่อสามารถดำเนินการกับข้อมูลได้:
 
 ![the dispatcher](./fluxiny_the_dispatcher.jpg)
 
-That's what I started with:
+ผมจะเริ่มต้นด้วย:
 
 ```js
 var Dispatcher = function () {
@@ -43,7 +43,7 @@ var Dispatcher = function () {
 };
 ```
 
-The first thing that we notice is that we *expect* to see an `update` method in the passed stores. It will be nice to throw an error if such method is not there:
+สิ่งแรกที่ควรทราบก็คือเราคาดว่าเมธอดอัพเดตจะมีอยู่ใน store ที่ได้รับมา หากไม่มีควรจะทำการส่ง error กลับไป:
 
 ```js
 register: function (store) {
@@ -57,22 +57,23 @@ register: function (store) {
 
 <br />
 
-### Bounding the views and the stores
+### ผูกส่วนแสดงผลกับ store
 
-The next logical step is to connect our views to the stores so we re-render when the state in the stores is changed.
+ขั้นตอนต่อไปคือการเชื่อมต่อส่วนผู้ใช้กับ storeเพื่อให้เราสามารถแสดงผลใหม่เมื่อสถานะของ store มีการเปลี่ยนแปลง
 
 ![Bounding the views and the stores](./fluxiny_store_change_view.jpg)
 
 
-#### Using a helper
+#### การใช้งาน helper
 
-Some of the flux implementations available out there provide a helper function that does the job. For example:
+การใช้งานฟลักซ์ในบางรูปแบบจะมีฟังก์ชัน helper ในการทำงาน ตัวอย่างเช่น
 
 ```js
 Framework.attachToStore(view, store);
 ```
-
-However, I don't quite like this approach. To make `attachStore` works we expect to see a specific API in the view and in the store. We kind of strictly define new public methods. Or in other words we say "Your views and store should have such APIs so we are able to wire them together". If we go down this road then we will probably define our own base classes which could be extended so we don't bother the developer with Flux details. Then we say "All your classes should extend our classes". This doesn't sound good either because the developer may decide to switch to another Flux provider and has to amend everything.
+อย่างไรก็ตามผมไม่ชอบวิธีนี้มากนัก เพื่อให้ `attachToStore` ทำงานได้อย่างถูกต้องเราจำเป็นต้องใช้ API แบบพิเศษในส่วนแสดงผลและ store ดังนั้นเราจำเป็นต้องกำหนดเมธอดสาธารณะใหม่อย่างเคร่งงวด หรือพูดอีกอย่างหนึ่งคือ ส่วนแสดงผลและ Store ของคุณควรมี API ดังกล่าวเพื่อให้สามารถเชื่อมต่อกันได้
+ถ้าเราดำเนินการไปในทิศทางนี้เราอาจจะกำหนดคลาสหลักที่เป็นส่วยขยายเพื่อที่จะไม่สร้างความสับสนกับรายละเอียดของ Flux ให้กับผู้พัฒนา กลายเป็นว่าทุกคลาสควรจะ extend มาจากคลาสของเรา
+มันไม่ใช่ความคิดที่ดีเพราะผู้พัฒนาอาจตัดสินใจเปลี่ยนไปใช้ Flux รูปแบบอื่น และต้องการแก้ไขทุกอย่าง
 
 <br /><br />
 
