@@ -77,9 +77,9 @@ Framework.attachToStore(view, store);
 
 <br /><br />
 
-#### With a mixin
+#### การใช้งาน mixin
 
-What if we use React's [mixins](https://facebook.github.io/react/docs/reusable-components.html#mixins).
+เกิดอะไรขึ้นถ้าเราใช้ [mixins](https://facebook.github.io/react/docs/reusable-components.html#mixins).
 
 ```js
 var View = React.createClass({
@@ -87,22 +87,22 @@ var View = React.createClass({
   ...
 });
 ```
+นี่เป็นวิธีที่ดีในการกำหนดลักษณะการทำงานสำหรับ component ดังนั้นในทางทฤษฎีเราอาจสร้าง mixin มาผูกกับ component ของเรา ถ้าพูดตามตรงผมไม่คิดว่านี่เป็นความคิดที่ดี และ[ดูเหมือนว่า](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750)ไม่ใช่แค่ผมที่คิดแบบนี้ เหตุผลที่ผมไม่ชอบ mixin คือมันปรับเปลี่ยน components โดยวิธีที่ไม่สามารถคาดเดาได้ ผมไม่รู้ว่าเกิดอะไรขึ้นเบื้องหลัง ดังนั้นผมจึงข้ามวิธีการนี้
 
-That's a "nice" way to define behavior of existing React component. So, in theory we may create a mixin that does the bounding for us. To be honest, I don't think that this is a good idea. And [it looks](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) like it's not only me. My reason of not liking mixins is that they modify the components in a non-predictable way. I have no idea what is going on behind the scenes. So I'm crossing this option.
+#### การใช้งาน context
 
-#### Using a context
+อีกเทคนิคหนึ่งที่อาจตอบโจทย์ได้คือ [context](https://facebook.github.io/react/docs/context.html) เป็นวิธีที่จะส่ง props ไปยัง component ย่อยโดยไม่จำเป็นต้องส่งลงไปทีละขั้น Facebook แนะนำให้ใช้ context ในกรณีที่เราส่งข้อมูลไปยัง component ที่เป็น component ย่อยถูกซ้อนกันหลายชั้น
 
-Another technique that may answer the question is React's [context](https://facebook.github.io/react/docs/context.html). It is a way to pass props to child components without the need to specify them in every level of the tree. Facebook suggests context in the cases where we have data that has to reach deeply nested components.
+> บางครั้ง คุณต้องการส่งข้อมูลไปยัง component โดยไม่ต้อง prop ในแต่ละระดับด้วยตนเอง คุณลักษณะ "บริบท" ของ React ช่วยให้คุณสามารถดำเนินการได้ context จะช่วยให้คุณสามารถดำเนินการนี้ได้ 
 
-> Occasionally, you want to pass data through the component tree without having to pass the props down manually at every level. React's "context" feature lets you do this.
-
-I see similarity with the mixins here. The context is defined somewhere at the top and magically serves props for all the children below. It's not immediately clear where the data comes from.
+ผมเห็นความคล้ายคลึงกันกับ mixins context ถูกกำหนดไว้ที่ไหนสักที่ด้านบน component และคอยส่งข้อมูลไปยัง component ย่อยทุกตัวอย่างน่าอัศจรรย์ โดยที่ไม่รู้ว่าข้อมูลมาจากที่ไหน
 
 <br /><br /><br />
 
-#### Higher-Order components concept
+#### แนวคิด Higher-Order components
 
-Higher-Order components pattern is [introduced](https://gist.github.com/sebmarkbage/ef0bf1f338a7182b6775) by Sebastian Markb&#229;ge and it's about creating a wrapper component that returns ours. While doing it it has the opportunity to send properties or apply additional logic. For example:
+รูปแบบ Higher-Order components ถูก[เสนอ](https://gist.github.com/sebmarkbage/ef0bf1f338a7182b6775) โดย Sebastian Markb&#229;ge จะเกียวกับการสร้าง wrapper component และส่ง component เดิมกลับมา ขณะที่มันทำงานจะมีการเดินการบางอย่างไปด้วย ตัวอย่างเช่น:
+
 
 ```js
 function attachToStore(Component, store, consumer) {
@@ -128,8 +128,7 @@ function attachToStore(Component, store, consumer) {
   return Wrapper;
 };
 ```
-
-`Component` is the view that we want attached to the `store`. The `consumer` function says what part of the store's state should be fetched and send to the view. A simple usage of the above function could be:
+`Component` คือส่วนแสดงผลที่เราต้องการจะแนบไปกับ `store` ฟังก์ชั่น `consumer` จะระบุว่าควรเก็บอะไรใน store และส่งไปที่ส่วนแสดงผล การใช้ฟังก์ชันข้างต้นอย่างง่ายเป็นดังนี้:
 
 ```js
 class MyView extends React.Component {
@@ -142,13 +141,14 @@ ProfilePage = connectToStores(MyView, store, (props, store) => ({
 
 ```
 
-That is an interesting pattern because it shifts the responsibilities. It is the view fetching data from the store and not the store pushing something to the view. This of course has its own pros and cons. It is nice because it makes the store dummy. A store that only mutates the data and says "Hey, my state is changed". It is not responsible for sending anything to anyone. The downside of this approach is maybe the fact that we have one more component (the wrapper) involved. We also need the three things - view, store and consumer to be in one place so we can establish the connection.
+นี่เป็นรูปแบบที่น่าสนใจเพราะมันจะส่งต่อหน้าที่ ส่วนแสดงผลจะดึงข้อมูลจาก store ไม่ใช่ให้ store กำหนดว่าจะส่งอะไรออกไป และแน่นอนว่ามันมีข้อดีและข้อเสียของมัน
+ข้อดีคือ ทำให้ง่ายต่อการจัดเก็บ store จะทำหน้่ที่เพียงแค่เปลี่ยนแปลงข้อมูลและคอยบอกว่าข้อมูลได้ถูกแก้ไขแล้ว มันไม่ได้มีหน้าที่รับผิดชอบต่อการส่งข้อมูลอีกต่อไป ข้อเสียของวิธีการนี้คือ อาจเป็นไปได้ว่าเราจะมี component (wrapper) กว่าหนึ่งที่เกี่ยวข้อง นอกจากนี้เรายังต้องมีสามสิ่งนี้คือ view, store และ consumer ในที่เดียวกันเพื่อให้เราสามารถเชื่อมต่อได้
 
-#### My choice
+#### ตัวเลือกของผม
 
-The last option above, higher-order components, is really close to what I'm searching for. I like the fact that the view decides what it needs. That *knowledge* anyway exists in the component so it makes sense to keep it there. That's also why the functions that generate higher-order components are usually kept in the same file as the view. What if we can use similar approach but not passing the store at all. Or in other words, a function that accepts only the consumer. And that function is called every time when there is a change in the store.
+ผมเลือกวิธีสุดท้าย higher-order components มีความใกล้เคียงกับสิ่งที่ผมต้องการแล้ว ให้ส่วนแสดงผลกำหนดสิ่งที่ต้องการ ความเข้าใจที่มีอยู่เกี่ยวกับคอมโพเนนต์ดังนั้นจึงควรเก็บไว้ที่นั่น นั่นคือเหตุผลที่ฟังก์ชั่นที่สร้าง higher-order components จะถูกเก็บไว้ในไฟล์เดียวกับส่วนแสดงผล ถ้าเราใช้วิธีการแบบเดียวกันแต่ไม่ส่ง store หรือกล่าวอีกนัยหนึ่งฟังก์ชั่นจะรับเฉพาะ consumer เท่านั้น และฟังก์ชันนี้จะถูกเรียกทุกครั้งเมื่อ store มีการเปลี่ยนแปลง
 
-So far our implementation interacts with the store only in the `register` method.
+ถึงตอนนี้การใช้งานของเรามีเพียงการโต้ตอบกับ store เท่านั้นใน `register` เมธอด
 
 ```js
 register: function (store) {
