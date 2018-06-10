@@ -160,13 +160,13 @@ register: function (store) {
 }
 ```
 
-By using `register` we keep a reference to the store inside the dispatcher. However, `register` returns nothing. And instead of nothing it may return a **subscriber** that will accept our consumer functions.
+โดยใช้ `register` เราจะอ้างอิงไปยัง store ภายใน dispatcher อย่างไรก็ตาม `register` จะไม่มีการส่งข้อมูลอะไรกลับไป ฟังก์ชั่นสำหรับผู้บริโภคได้ หรือเราอาจจะให้มันส่ง **subscriber** ที่รับฟังก์ชั่น consumer กลับไป
 
 ![Fluxiny - connect store and view](./fluxiny_store_view.jpg)
 
-I decided to send the whole store to the consumer function and not the data that the store keeps. Like in the higher-order components pattern the view should say what it needs by using store's getters. This makes the store really simple and there is no trace of presentational logic.
+ผมตัดสินใจส่งทั้ง store ไปยังฟังก์ชัน consumer แทนที่จะส่งแค่ข้อมูลที่เก็บไว้นนั้น เช่นเดียวกันในรูปแบบ higher-order components ส่วนแสดงผลควรใช้ getter ของ store เพื่อเรียกสิ่งที่ต้องการ ทำให้ใช้ store ค่อนข้างง่ายและไม่ต้องมีการติดตาม
 
-Here is how the register method looks like after the changes:
+นี่คือเมธอด register ที่เปลี่ยนแปลง:
 
 ```js
 register: function (store) {
@@ -187,9 +187,9 @@ register: function (store) {
 }
 ```
 
-The last bit in the story is how the store says that its internal state is changed. It's nice that we collect the consumer functions but right now there is no code that execute them.
+สิ่งสุดท้ายที่จะทำให้เสร็จสมบูรณ์คือ ทำให้ store แจ้งเมื่อข้อมูลมีการเปลี่ยนแปลง เราได้รวบรวมฟังก์ชัน consumer ไว้แล้ว แต่ตอนนี้ยังไม่มีการใช้งาน
 
-According to the basic principles of the flux architecture the stores change their state in response of actions. In the `update` method we send the `action` but we could also send a function `change`. Calling that function should trigger the consumers:
+ตามหลักการพื้นฐานของสถาปัตยกรรม Flux นั้น store จะเปลี่ยนสถานะเพื่อตอบสนองต่อ actions ในเมธอด `update` เราจะส่ง `action` แต่เรายังสามารถส่งฟังก์ชัน `change` การเรียกฟังก์ชันนี้เพื่อเรียก consumer:
 
 ```js
 register: function (store) {
@@ -221,10 +221,9 @@ dispatch: function (action) {
   }
 }
 ```
+*ถ้าหากว่าเรา push `change` กับ `store` ในอาเรย์ `_stores` หลังจากนั้นให้ `dispatch` เรียกเมธอด `update` และส่ง `action` กับ `change` ไปในฟังก์ชัน*
 
-*Notice how we push `change` together with `store` inside the `_stores` array. Later in the `dispatch` method we call `update` by passing the `action` and the `change` function.*
-
-A common use case is to render the view with the initial state of the store. In the context of our implementation this means firing all the consumers at least once when they land in the library. This could be easily done in the `subscribe` method:
+การใช้งานทั่วไป เพื่อสร้างส่วนแสดงผลและกำหนดสถานะเริ่มต้นของ store ในบริบทของการใช้งานของเราหมายถึง consumer จะถูกเรียกใช้อย่างน้อยหนึ่งครั้งเมื่อเรียกใช้งาน library ซึ่งสามารถทำได้อย่างง่ายใน `subscribe` เมธอด:
 
 ```js
 var subscribe = function (consumer, noInit) {
@@ -233,7 +232,7 @@ var subscribe = function (consumer, noInit) {
 };
 ```
 
-Of course sometimes this is not needed so we added a flag which is by default falsy. Here is the final version of our dispatcher:
+แน่นอนว่าบางครั้งเราไม่จำเป็นที่จะต้องกำหนดตัวแปร flag ขึ้นมาให้เป็นค่า false และนี่ก็เป็นหน้าตา dispatcher ที่เสร็จแล้ว:
 
 <span class="new-page"></span>
 
