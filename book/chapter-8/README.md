@@ -318,9 +318,9 @@ var createAction = function (type) {
 
 วิธีการสร้าง actions ด้วยวิธีนี้นี้เป็นที่นิยมมากฟังก์ชั่นด้านบนเรียกว่า *action creators*.
 
-## The final code
+## โค้ดที่สมบูณร์
 
-In the section above we successfully hide the dispatcher while submitting actions. We may do it again for the store's registration:
+ในส่วนก่อนหน้า dispatcher ถูกซ่อนอยู่ในขณะที่เราดำเนินการ action เราอาจดำเนินการอีกครั้งเพื่อ registry store:
 
 ```js
 var createSubscriber = function (store) {
@@ -328,7 +328,7 @@ var createSubscriber = function (store) {
 }
 ```
 
-And instead of exporting the dispatcher we may export only these two functions `createAction` and `createSubscriber`. Here is how the final code looks like:
+และแทนที่จะ export dispaatcher เราอาจ export เฉพาะสองฟังก์ชันนี้คือ `createAction` และ `createSubscriber` นี่คือโค้ดที่สมบูณร์
 
 ```js
 var Dispatcher = function () {
@@ -392,17 +392,17 @@ module.exports = {
 
 ```
 
-If we add the support of AMD, CommonJS and global usage we end up with 66 lines of code, 1.7KB plain or 795 bytes after minification JavaScript.
+ถ้าเราเพิ่มการสนับสนุน AMD, CommonJS และการใช้งาน global โค้ดที่สมบูณร์จะมีทั้งหมด 66 บรรทัด ขนาดไฟล์ 1.7KB และถ้าบีบอัดเหลือ 795 bytes โดยการ minifying JavaScript
 
-## Wrapping up
+## Wrapper
 
-We have a module that provides two helpers for building a Flux project. Let's write a simple counter app that doesn't involve React so we see the pattern in action.
+เรามีโมดูล helper สองอันสำหรับการสร้าง Flux เราจะลองเขียนแอปนับจำนวนแบบง่าย ๆ โดยที่ไม่ใช้ React เพื่อให้เราเห็นรูปแบบการทำงาน
 
 <span class="new-page"></span>
 
-### The markup
+### Markup
 
-We'll need some UI to interact with it so:
+เราจำเป็นต้องมี UI เพื่อโต้ตอบกับข้อมูลดังกล่าว:
 
 ```html
 <div id="counter">
@@ -412,9 +412,9 @@ We'll need some UI to interact with it so:
 </div>
 ```
 
-The `span` will be used for displaying the current value of our counter. The buttons will change that value.
+`span` ใช้เพื่อแสดงค่าจำนวนปัจจุบัน เมื่อมีการคลิกปุ่มจะเปลี่ยนจำนวนค่า
 
-### The view
+### ส่วนแสดงผล
 
 ```js
 const View = function (subscribeToStore, increase, decrease) {
@@ -434,23 +434,22 @@ const View = function (subscribeToStore, increase, decrease) {
 };
 ```
 
-It accepts a store subscriber function and two action function for increasing and decreasing the value. The first few lines of the view are just fetching the DOM elements.
+ส่วนแสดงผลจะได้รับฟังก์ชั่น store subscriber และ action สำหรับการ เพิ่มค่า / ลดค่า ในบรรทัดแรก ๆ นั้นเป็นเพียงแค่การ fetch DOM elements
 
-After that we define a `render` function which puts the value inside the `span` tag. `updateState` will be called every time when the store changes. So, we pass these two functions to `subscribeToStore` because we want to get the view updated and we want to get an initial rendering. Remember how our consumers are called at least once by default.
+หลังจากนั้นเราได้กำหนดฟังก์ชัน `render` ซึ่งมีหน้าที่ในการแสดงค่าลงในแท็ก span และฟังก์ชัน `updateState` ซึ่งจะถูกเรียกใช้เมื่อ store มีการเปลี่ยนแปลง เราได้ส่งสองฟังก์ชั่นนั้นไปใน `subscribeToStore` เนื่องจากเราต้องการให้ส่วนแสดงผลมีการเปลี่ยนแปลข้อมูล จำไว้ว่าฟังก์ชั่น consumer จะถูกเรียกอย่างน้อยหนึ่งครั้ง
 
-The last bit is calling the action functions when we press the buttons.
+สิ่งสุดท้ายที่ต้องทำคือผูก action กับ button element
 
-### The store
+### Store
 
-Every action has a type. It's a good practice to create constants for these types so we don't deal with raw strings.
-
+ทุก action จะมี type การประกาศให้เป็นตัวแปรค่าคงที่วิธีที่ดีที่สุด เนื่องจากเราไม่ต้องมีการประมวลผลกับมัน
 
 ```js
 const INCREASE = 'INCREASE';
 const DECREASE = 'DECREASE';
 ```
 
-Very often we have only one instance of every store. For the sake of simplicity we'll create ours as a singleton.
+โดยปกติเรามักจะมีเพียงหนึ่ง store เท่านั้น เพื่อความง่ายเรา store ให้มีเพียงอันเดียว
 
 ```js
 const CounterStore = {
@@ -469,11 +468,10 @@ const CounterStore = {
 };
 ```
 
-`_data` is the internal state of the store. `update` is the well known method that our dispatcher calls. We process the action inside and say `change()` when we are done. `getValue` is a public method used by the view so it reaches the needed info. In our case this is just the value of the counter.
+`_data` คือ state ที่อยู่ใน store ส่วน `update` นั้นอย่างที่เราได้ทราบกันไปแล้วว่าจะถูกเรียกโดย dispatcher และเราจะดำเนินการ action ภายในนั้น และฟังชั่น `change()` จะถูกเรียกเมื่อข้อมูลได้มีการเปลี่ยนแปลง ส่วน`getValue` นั้นเป็น public method จะถูกเรียกโดยส่วนแสดงผลเมื่อต้องการเรียกข้อมูล ในกรณีนี้เป็นเพียงแค่ข้อมูลจำนวนบัน
 
-### Wiring all the pieces
-
-So, we have the store waiting for actions from the dispatcher. We have the view defined. Let's create the store subscriber, the actions and run everything.
+### เชื่อมทุกส่วนเข้าด้วยกัน
+ตอนนี้เรามี store ที่รอ action จาก the dispatcher และได้สร้างส่วนแสดงผลไว้แล้ว เหลือเพียงสร้าง store subscriber มาเริ่มทำให้มันทำงานได้กันเถอะ
 
 ```js
 const { createAction, createSubscriber } = Fluxiny.create();
@@ -485,11 +483,11 @@ const actions = {
 
 View(counterStoreSubscriber, actions.increase, actions.decrease);
 ```
+และตอนนี้ ส่วนแสดงผลได้ subscribe store เรียบร้อยแล้ว และจะ render โดย default เพราะเมธอด `render` เป็นหนึ่งใน consumer
 
-And that's it. Our view is subscribed to the store and it renders by default because one of our consumers is actually the `render` method.
+### Live demo
 
-### A live demo
+สามารถดูตัวอย่าง live demo ที่เว็บ JSBin [http://jsbin.com/koxidu/embed?js,output](http://jsbin.com/koxidu/embed?js,output). 
+ถ้าคุณคิดว่าตัวอย่างนี้ยังไม่เพียงพอสามารถไปดูตัวอย่างเพิ่มเติมใน repository Fluxiny [https://github.com/krasimir/fluxiny/tree/master/example](https://github.com/krasimir/fluxiny/tree/master/example) ซึ่งได้ใช้ React ในการสร้างส่วนแสดงผล
 
-A live demo could be seen in the following JSBin [http://jsbin.com/koxidu/embed?js,output](http://jsbin.com/koxidu/embed?js,output). If that's not enough and it seems too simple for you please checkout the example in Fluxiny repository [https://github.com/krasimir/fluxiny/tree/master/example](https://github.com/krasimir/fluxiny/tree/master/example). It uses React as a view layer.
-
-*The Flux implementation discussed in this section is available here [github.com/krasimir/fluxiny](https://github.com/krasimir/fluxiny). Feel free to use it in a browser [directly](https://github.com/krasimir/fluxiny/tree/master/lib) or as a [npm dependency](https://www.npmjs.com/package/fluxiny).*
+*การใช้ Flux ที่กล่าวถึงในบทนี้จะอยู่ที่นี่ [github.com/krasimir/fluxiny](https://github.com/krasimir/fluxiny) สามารถใช้งานได้[โดยตรง](https://github.com/krasimir/fluxiny/tree/master/lib)ในเบราว์เซอร์ หรือผ่าน[npm dependency](https://www.npmjs.com/package/fluxiny)*
