@@ -275,9 +275,9 @@ var Dispatcher = function () {
 
 <span class="new-page"></span>
 
-## The actions
+## Actions
 
-You probably noticed that we didn't talk about the actions. What are they? The convention is that they should be simple objects having two properties - `type` and `payload`:
+คุณอาจจะเห็นว่าเรายังไม่ได้พูดถึง action แล้ว actions คืออะไร? โดยทั่วไปมันเป็นแค่ object ที่มีเพียง `type` และ `payload`:
 
 ```js
 {
@@ -289,9 +289,9 @@ You probably noticed that we didn't talk about the actions. What are they? The c
 }
 ```
 
-The `type` says what exactly the action is and the `payload` contains the information associated with the event. And in some cases we may leave the `payload` empty.
+`type` จะเป็นตัวบอกว่า action นั้นทำอะไร ส่วน payload จะเก็บข้อมูลที่เกี่ยวกับ event บางกรณีไม่จำเป็นต้องมีก็ได้
 
-It's interesting that the `type` is well known in the beginning. We know what type of actions should be floating in our app, who is dispatching them and which of the stores are interested. Thus, we can apply [partial application](http://krasimirtsonev.com/blog/article/a-story-about-currying-bind) and avoid passing the action object here and there. For example:
+สิ่งที่น่าสนใจคือ `type` ที่ได้กล่าวไปแล้วในตอนต้น และที่สำคัญคือเราควรจะรู้ว่าต้องมี action อะไรในแอปพลิเคชันของเราบ้าง และตัวไหนที่คอยทำการ dispatch ไปยัง store ดังนั้นเราจึงสามารถประยุกต์ใช้[บางส่วน](http://krasimirtsonev.com/blog/article/a-story-about-currying-bind)ได้ และหลีกเลี่ยงการส่ง object action ตัวอย่างเช่น
 
 ```js
 var createAction = function (type) {
@@ -308,15 +308,15 @@ var createAction = function (type) {
 }
 ```
 
-`createAction` leads to the following benefits:
+`createAction` มีข้อดีดังนี้:
 
-* We no more need to remember the exact type of the action. We now have a function which we call passing only the payload.
-* We no more need an access to the dispatcher which is a huge benefit. Otherwise, think about how we have to pass it to every single place where we need to dispatch an action.
-* In the end we don't have to deal with objects but with functions which is much nicer. The objects are *static* while the functions describe a *process*.
+* เราไม่จำเป็นต้องจำ type ของ action อีกต่อไป ตอนนี้เรามีฟังก์ชันที่เราเรียกผ่าน payload เท่านั้น
+* เราไม่จำเป็นต้องเข้าถึง dispatcher อีกต่อไปซึ่งเป็นประโยชน์อย่างมาก มิเช่นนั้นคุณต้องพิจารณาวิธีส่งข้อมูลทุกครั้งที่ใช้งาน dispatch
+* ข้อสุดท้ายเราไม่ต้องจัดการ object อีกต่อไป เราแค่เรียกฟังก์ชันซึ่งดีกว่ามาก ซึ่ง object เป็น *static* ขณะที่ฟังก์ชันอธิบายถึง *process*
 
 ![Fluxiny actions creators](./fluxiny_action_creator.jpg)
 
-This approach for creating actions is actually really popular and functions like the one above are usually called *action creators*.
+วิธีการสร้าง actions ด้วยวิธีนี้นี้เป็นที่นิยมมากฟังก์ชั่นด้านบนเรียกว่า *action creators*.
 
 ## The final code
 
