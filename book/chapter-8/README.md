@@ -487,7 +487,7 @@ View(counterStoreSubscriber, actions.increase, actions.decrease);
 
 ### Live demo
 
-สามารถดูตัวอย่าง live demo ที่เว็บ JSBin [http://jsbin.com/koxidu/embed?js,output](http://jsbin.com/koxidu/embed?js,output). 
+สามารถดูตัวอย่าง live demo ที่เว็บ JSBin [http://jsbin.com/koxidu/embed?js,output](http://jsbin.com/koxidu/embed?js,output) 
 ถ้าคุณคิดว่าตัวอย่างนี้ยังไม่เพียงพอสามารถไปดูตัวอย่างเพิ่มเติมใน repository Fluxiny [https://github.com/krasimir/fluxiny/tree/master/example](https://github.com/krasimir/fluxiny/tree/master/example) ซึ่งได้ใช้ React ในการสร้างส่วนแสดงผล
 
-*การใช้ Flux ที่กล่าวถึงในบทนี้จะอยู่ที่นี่ [github.com/krasimir/fluxiny](https://github.com/krasimir/fluxiny) สามารถใช้งานได้[โดยตรง](https://github.com/krasimir/fluxiny/tree/master/lib)ในเบราว์เซอร์ หรือผ่าน[npm dependency](https://www.npmjs.com/package/fluxiny)*
+*การใช้ Flux ที่กล่าวถึงในบทนี้จะอยู่ที่นี่ [github.com/krasimir/fluxiny](https://github.com/krasimir/fluxiny) สามารถใช้งานได้[โดยตรง](https://github.com/krasimir/fluxiny/tree/master/lib)ในเบราว์เซอร์ หรือผ่าน [npm dependency](https://www.npmjs.com/package/fluxiny)*
