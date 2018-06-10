@@ -79,7 +79,7 @@ Framework.attachToStore(view, store);
 
 #### การใช้งาน mixin
 
-เกิดอะไรขึ้นถ้าเราใช้ [mixins](https://facebook.github.io/react/docs/reusable-components.html#mixins).
+เกิดอะไรขึ้นถ้าเราใช้ [mixins](https://facebook.github.io/react/docs/reusable-components.html#mixins)
 
 ```js
 var View = React.createClass({
@@ -102,7 +102,6 @@ var View = React.createClass({
 #### แนวคิด Higher-Order components
 
 รูปแบบ Higher-Order components ถูก[เสนอ](https://gist.github.com/sebmarkbage/ef0bf1f338a7182b6775)โดย Sebastian Markb&#229;ge จะเกียวกับการสร้าง wrapper component ก่อนที่จะรีเทิร์น component ออกมา โดยที่สามารถเพิ่มคุณสมบัติให้มันการเดินการบางอย่างเข้าไปด้วย ตัวอย่างเช่น:
-
 
 ```js
 function attachToStore(Component, store, consumer) {
@@ -128,6 +127,7 @@ function attachToStore(Component, store, consumer) {
   return Wrapper;
 };
 ```
+
 `Component` คือส่วนแสดงผลที่เราต้องการจะแนบกับ `store` ฟังก์ชั่น `consumer` จะระบุว่าควรเก็บอะไรใน store และส่งไปที่ส่วนแสดงผล การใช้ฟังก์ชันข้างต้นอย่างง่ายเป็นดังนี้:
 
 ```js
@@ -148,7 +148,7 @@ ProfilePage = connectToStores(MyView, store, (props, store) => ({
 
 ผมเลือกวิธีสุดท้าย higher-order components มีความใกล้เคียงกับสิ่งที่ผมต้องการแล้ว ให้ส่วนแสดงผลกำหนดสิ่งที่ต้องการ ความเข้าใจที่มีอยู่เกี่ยวกับคอมโพเนนต์นั้นเหมาะสมเก็บไว้ที่นั่น นั่นคือเหตุผลว่าฟังก์ชั่นที่สร้าง higher-order components จะถูกเก็บไว้ในไฟล์เดียวกับส่วนแสดงผล ถ้าเราใช้วิธีการแบบเดียวกันแต่ไม่ส่ง store ไป หรือกล่าวอีกนัยหนึ่งฟังก์ชั่นจะรับเฉพาะ consumer เท่านั้น และฟังก์ชันนี้จะถูกเรียกทุกครั้งเมื่อ store มีการเปลี่ยนแปลง
 
-ถึงตอนนี้การใช้งานของเรามีเพียงการโต้ตอบกับ store เท่านั้นใน `register` เมธอด
+ถึงตอนนี้การใช้งานของเรามีเพียงการโต้ตอบกับ store เท่านั้นในเมธอด `register`
 
 ```js
 register: function (store) {
@@ -164,7 +164,7 @@ register: function (store) {
 
 ![Fluxiny - connect store and view](./fluxiny_store_view.jpg)
 
-ผมตัดสินใจส่งทั้ง store ไปยังฟังก์ชัน consumer แทนที่จะส่งแค่ข้อมูลที่เก็บไว้นนั้น เช่นเดียวกันในรูปแบบ higher-order components ส่วนแสดงผลควรใช้ getter ของ store เพื่อเรียกสิ่งที่ต้องการ ทำให้ใช้ store ค่อนข้างง่ายและไม่ต้องมีการติดตาม
+ผมเลือกส่งทั้ง store ไปยังฟังก์ชัน consumer แทนที่จะส่งแค่ข้อมูลที่เก็บไว้นนั้น เช่นเดียวกันในรูปแบบ higher-order components ส่วนแสดงผลควรใช้ getter ของ store เพื่อเรียกสิ่งที่ต้องการ ทำให้ใช้ store ค่อนข้างง่ายและไม่ต้องมีการติดตาม
 
 นี่คือเมธอด register ที่เปลี่ยนแปลง:
 
@@ -221,6 +221,7 @@ dispatch: function (action) {
   }
 }
 ```
+
 *ถ้าหากว่าเรา push `change` กับ `store` ในอาเรย์ `_stores` หลังจากนั้นให้ `dispatch` เรียกเมธอด `update` และส่ง `action` กับ `change` ไปในฟังก์ชัน*
 
 การใช้งานทั่วไป เพื่อสร้างส่วนแสดงผลและกำหนดสถานะเริ่มต้นของ store ในบริบทของการใช้งานของเราหมายถึง consumer จะถูกเรียกใช้อย่างน้อยหนึ่งครั้งเมื่อเรียกใช้งาน library ซึ่งสามารถทำได้อย่างง่ายใน `subscribe` เมธอด:
@@ -483,6 +484,7 @@ const actions = {
 
 View(counterStoreSubscriber, actions.increase, actions.decrease);
 ```
+
 และตอนนี้ ส่วนแสดงผลได้ subscribe store เรียบร้อยแล้ว และจะ render โดย default เพราะเมธอด `render` เป็นหนึ่งใน consumer
 
 ### Live demo
